@@ -1,0 +1,36 @@
+---
+- hosts: 67.205.173.122
+  become: true
+  tasks:
+
+  - name: Install java
+    apt: 
+      name: default-jre
+      update_cache: yes
+
+  - name: Import Jenkins CI key
+    apt_key:
+      url: https://pkg.jenkins.io/debian/jenkins.io.key
+      state: present
+
+  - name: Append the Debian package repository
+    command: sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+
+  - name: install jenkins
+    apt:
+      name: jenkins
+      state: present
+      update_cache: yes
+
+  - name: Start jenkins service
+    service:
+      name: jenkins
+      state: started
+
+  - name: Allow port 8080
+    ufw:
+      rule: allow
+      port: 8080
+
+  - name: Get Password
+    command: cat /var/lib/jenkins/secrets/initialAdminPassword
