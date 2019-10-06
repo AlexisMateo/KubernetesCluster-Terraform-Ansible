@@ -32,5 +32,15 @@
       rule: allow
       port: 8080
 
-  - name: Get Password
-    command: cat /var/lib/jenkins/secrets/initialAdminPassword
+  - name: copy local config to remote
+    copy:
+      src: jenkins.alexismateo.net
+      dest: /etc/nginx/sites-available/jenkins.alexismateo.net
+
+  - name: Create symlink to jenkins.alexismateo.net
+    file: 
+      src: /etc/nginx/sites-available/jenkins.alexismateo.net 
+      dest: /etc/nginx/sites-enabled/jenkins.alexismateo.net
+      state: link
+      force: true
+    notify: nginx reload
