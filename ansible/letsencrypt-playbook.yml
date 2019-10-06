@@ -1,0 +1,39 @@
+---
+- hosts: jenkins
+  become: true
+  tasks:
+
+  - name:  install nginx
+    apt:
+      name: nginx
+      state: present
+
+  - name: copy config
+    template:
+      src: alexismateo.net
+      dest: /etc/nginx/sites-available/alexismateo.net
+
+  - name: reload nginx sevice
+    service:
+      name: nginx
+      state: reloaded
+ 
+  - name:  add the cerbot repository
+    apt_repository:
+      repo: ppa:certbot/certbot
+
+  - name: install certbot
+    apt:
+      name: python-certbot-nginx
+      state: present
+      update_cache: yes
+  
+  - name: allow HTTPs traffic
+    ufw:
+      rule: allow
+      name: Nginx Full
+  
+  - name: Obtaining an SSL certificate
+    command: certbot --nginx --email alexismateod@outlook.com -n --agree-tos -d alexismateo.net -d www.alexismateo.net
+  
+
