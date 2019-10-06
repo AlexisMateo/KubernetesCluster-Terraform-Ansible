@@ -28,3 +28,4 @@ override.tf.json
 # example: *tfplan*
 kubeconfig.yaml
 terraform.tfstate.backup
+k8s
