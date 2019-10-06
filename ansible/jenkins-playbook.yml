@@ -1,5 +1,5 @@
 ---
-- hosts: 67.205.173.122
+- hosts: jenkins
   become: true
   tasks:
 
